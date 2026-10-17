@@ -15,6 +15,18 @@ npm run typecheck
 
 Node 24 ou plus récent (les tests s'exécutent directement en TypeScript).
 
+## Déployer sur Cloudflare
+
+Le fichier `.node-version` impose Node 24 au build Cloudflare (sans lui, l'image par défaut
+fournit un Node trop ancien pour Vite 8 et le build échoue). `wrangler.jsonc` publie `dist/`
+comme site statique (Workers Static Assets).
+
+- **Depuis le dépôt Git** (Workers Builds) : commande de build `npm run build`, commande de
+  déploiement `npx wrangler deploy`.
+- **Depuis un poste** : `npm run build && npx wrangler deploy`.
+- **Cloudflare Pages** (ancien parcours) : commande de build `npm run build`, dossier de sortie
+  `dist` ; la version de Node est lue dans `.node-version`.
+
 ## Organisation
 
 | Dossier | Contenu |
