@@ -4,7 +4,8 @@ import { chargerLocal, enregistrerLocal } from "../projet/stockage.ts";
 import type { Projet } from "../projet/types.ts";
 import { PageProjet } from "./projet/PageProjet.tsx";
 import { PageReferentiel } from "./referentiel/PageReferentiel.tsx";
-import { lien, lireRoute, type OngletPrincipal } from "./route.ts";
+import { aller, lien, lireRoute, type OngletPrincipal } from "./route.ts";
+import { ecouterPsida, integreDansPsida, signalerPret, transmettreEfforts } from "./psida.ts";
 
 const PageAction = lazy(() => import("./action/PageAction.tsx"));
 const PageModele = lazy(() => import("./modele/PageModele.tsx"));
@@ -32,6 +33,18 @@ export function App() {
 
   useEffect(() => enregistrerLocal(projet), [projet]);
 
+  // Intégration dans PSIDA (onglet « Calcul sismique ») : réception des projets, envoi des efforts par appui.
+  const [alertePsida, setAlertePsida] = useState<string | null>(null);
+  useEffect(() => {
+    const fin = ecouterPsida((p) => { setProjet(p); setAlertePsida(null); aller("projet"); }, (m) => setAlertePsida(m));
+    signalerPret();
+    return fin;
+  }, []);
+  useEffect(() => {
+    const t = window.setTimeout(() => transmettreEfforts(projet), 300);
+    return () => window.clearTimeout(t);
+  }, [projet]);
+
   const modifier = useCallback((f: (p: Projet) => void) => {
     setProjet((prec) => {
       const suivant = structuredClone(prec);
@@ -43,7 +56,7 @@ export function App() {
   return (
     <div className="app">
       <header className="barre">
-        <span className="marque">Pont EC8</span>
+        <span className="marque">Pont EC8{integreDansPsida() ? " · PSIDA" : ""}</span>
         <nav className="onglets" aria-label="Sections">
           {ONGLETS.map((o) => (
             <a key={o.id} href={lien(o.id)} className={`onglet ${route.onglet === o.id ? "actif" : ""}`} aria-current={route.onglet === o.id ? "page" : undefined}>
@@ -52,6 +65,7 @@ export function App() {
           ))}
         </nav>
       </header>
+      {alertePsida && <div className="page" role="alert">Projet PSIDA non importé : {alertePsida}</div>}
       {route.onglet === "projet" && <PageProjet projet={projet} modifier={modifier} remplacer={setProjet} sous={route.sous} />}
       {route.onglet === "action" && (
         <Suspense fallback={<main className="page">Chargement…</main>}>

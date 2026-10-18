@@ -12,6 +12,7 @@ import { NoteCalcul, References } from "../note/NoteCalcul.tsx";
 import { TableValidation } from "../note/TableValidation.tsx";
 import { Onglets, Panneau } from "../Onglets.tsx";
 import { aller } from "../route.ts";
+import { integreDansPsida } from "../psida.ts";
 
 const Vue3D = lazy(() => import("../projet/Vue3D.tsx"));
 
@@ -303,7 +304,9 @@ export default function PageAnalyse({ projet, sous }: { projet: Projet; sous: st
           <button type="button" className="bouton-secondaire" onClick={() => telechargerEfforts(exporterEfforts(projet, a, r))}>
             Exporter les efforts par appui (PSIDA)
           </button>{" "}
-          Fichier JSON à importer dans la carte « Appuis et fondations » de PSIDA (combinaison sismique des fûts et fondations).
+          {integreDansPsida()
+            ? "Dans PSIDA, ces efforts sont transmis automatiquement : bouton « Utiliser ces efforts dans Appuis et fondations » au-dessus."
+            : "Fichier JSON à importer dans la carte « Appuis et fondations » de PSIDA (combinaison sismique des fûts et fondations)."}
         </p>
       </header>
       <Onglets<SousOnglet>
