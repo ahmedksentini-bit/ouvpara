@@ -3,6 +3,7 @@ import { actionSismique } from "../../moteur/action.ts";
 import { analyse, type Analyse } from "../../moteur/analyse.ts";
 import { modele, type Borne, type Direction } from "../../moteur/modele.ts";
 import { valeur } from "../../moteur/spectres.ts";
+import { exporterEfforts, telechargerEfforts } from "../../moteur/export-efforts.ts";
 import { validerAnalyseExemple } from "../../moteur/validation-exemple.ts";
 import type { Projet } from "../../projet/types.ts";
 import { GraphiqueSpectre, type Serie } from "../action/GraphiqueSpectre.tsx";
@@ -297,6 +298,12 @@ export default function PageAnalyse({ projet, sous }: { projet: Projet; sous: st
         <h1>Analyse : méthode du mode fondamental</h1>
         <p>
           {projet.nom} — Tx = {f(r.directions.x.lbdp.T)} s, Ty = {f(r.directions.y.lbdp.T)} s ; Fx = {f(r.directions.x.ubdp.F)} MN, Fy = {f(r.directions.y.ubdp.F)} MN
+        </p>
+        <p>
+          <button type="button" className="bouton-secondaire" onClick={() => telechargerEfforts(exporterEfforts(projet, a, r))}>
+            Exporter les efforts par appui (PSIDA)
+          </button>{" "}
+          Fichier JSON à importer dans la carte « Appuis et fondations » de PSIDA (combinaison sismique des fûts et fondations).
         </p>
       </header>
       <Onglets<SousOnglet>
