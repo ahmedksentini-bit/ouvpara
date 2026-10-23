@@ -40,8 +40,9 @@ comme site statique (Workers Static Assets).
 
 ## Périmètre de la saisie (V1)
 
-Pont droit à tablier continu sur culées perchées (poteaux, sommier, garde-grève) et piles à fûts
-rectangulaires ou circulaires sur semelles, appareils d'appui en élastomère fretté, fixes ou glissants.
+Pont droit à tablier continu, ou à travées indépendantes (`tablier.continuite = "isostatique"` : joint sur chaque pile),
+sur culées perchées (poteaux, sommier, garde-grève) et piles à fûts rectangulaires ou circulaires sur semelles, appareils
+d'appui en élastomère fretté, fixes ou glissants.
 Fondations supposées infiniment rigides, comme dans l'exemple du guide. Biais, courbure, culées à mur
 de front et fondations sur pieux viendront ensuite.
 
@@ -73,6 +74,14 @@ pic opposé) ou bilinéaire cinématique ; différences centrales ; moyenne sur 
 Le **pont isolé** (EN 1998-2 chapitre 7) se décrit par `isolation` { type "lrb" (Qd, Kd en MN et MN/m, rapportKe) ou
 "pendule" (R, mu), capacite, lambdaKp, lambdaF0, gammaIS, deplacementPermanent, loinFaille } ; mode fondamental itératif
 (7.4 à 7.10, tableau 7.1), DP/LBDP/UBDP, vérifications 7.6.2 et 7.7.1, contrôle temporel (7.5.6).
+
+Les **travées indépendantes** (ponts à poutres isostatiques) sont calculées sur un modèle dynamique à travées séparées : une
+translation par travée en X, une poutre par travée en Y, piles en console, deux rangées d'appareils par pile (la moitié des
+appareils de la ligne chacune), analyse spectrale multimodale (4.2.1) ; effort sur une pile = somme des deux rangées,
+distorsion = rangée la plus défavorable, ouverture relative des joints ; réactions verticales forfaitaires de chaque travée
+(b = 0,41) cumulées sur les piles ; repos d'appui sur chaque pile (6.6.4 : l_ov = l_m + d_eg + d_es + d_E,tête, L_eff =
+demi-travée, recouvrement disponible `appuis[i].reposDisponible`). L'onglet Vérifications affiche aussi les conseils « Que
+changer ? » des critères non vérifiés.
 
 **Efforts transmis à PSIDA** (`options.methodeEfforts`, carte en tête de l'onglet Méthodes) : `mode_fondamental` (défaut),
 `multimodale`, `temporel_lineaire` (moyenne de 7 accélérogrammes, maximum en deçà) ou `pont_isole` (UBDP par ligne, q = 1).

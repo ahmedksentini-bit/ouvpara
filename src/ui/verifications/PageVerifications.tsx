@@ -5,6 +5,7 @@ import { modele } from "../../moteur/modele.ts";
 import { validerAppuisExemple } from "../../moteur/validation-exemple.ts";
 import { verifierAppuis, type Critere, type Etat, type VerifAppuis } from "../../moteur/verif-appuis.ts";
 import type { Projet } from "../../projet/types.ts";
+import { Conseils } from "../Conseils.tsx";
 import { formatNombre } from "../format.ts";
 import { NoteCalcul, References } from "../note/NoteCalcul.tsx";
 import { TableValidation } from "../note/TableValidation.tsx";
@@ -48,6 +49,7 @@ function TableCriteres({ criteres }: { criteres: Critere[] }) {
                   {c.libelle}
                   {c.commentaire && <small className="remarque-validation">{c.commentaire}</small>}
                   <References ids={c.references} />
+                  {c.etat === "non_verifie" && c.conseils && <Conseils items={c.conseils} />}
                 </td>
                 <td className="num">
                   {f(c.valeur)} {c.unite}
@@ -228,7 +230,7 @@ function ReposJoints({ v }: { v: VerifAppuis }) {
                 <td className="num">{f(r.deg, 4)}</td>
                 <td className="num">{f(r.des, 4)}</td>
                 <td className="num"><strong>{f(r.lov)}</strong></td>
-                <td className="num">{f(r.disponible, 2)}</td>
+                <td className="num">{Number.isFinite(r.disponible) ? f(r.disponible, 2) : "—"}</td>
               </tr>
             ))}
           </tbody>
