@@ -91,6 +91,12 @@ q ≤ 1,5 ou pont isolé ; sinon dimensionnement en capacité des piles, V_C = �
 V_b = 1,3 K_b d_b (déformation de calcul des appareils, raideur + 30 %) pour les culées, min(V_C ; V_b) pour les piles. PSIDA applique ces cas aux fondations
 seulement ; les fûts restent dimensionnés sous A_Ed.
 
+**Choix automatique de la méthode** (sans `options.methodeEfforts`) : mode fondamental dans son domaine (masse des piles,
+tablier rigide L/B ≤ 4 ou Δd/da ≤ 0,20), multimodale sinon. **Export des efforts** : inertie propre des fûts ajoutée au pied
+des piles (accélération de a_g S au pied à max(S_d(T_fût) ; S_d(T₁)) en tête). **Appareils** : non-glissement
+μ = 0,1 + 1,5 K_f/σ_m (NF EN 1337-3 5.3.3.6) ; appareils fixes max(1,3 ; q)·F_Ed en ductilité limitée, capacité γ0 M_Rd en
+ductile (corrections tirées de Capra et Godreau, *Ouvrages d'art en zone sismique*, 2015).
+
 ## Référentiel
 
 Chaque entrée porte :
